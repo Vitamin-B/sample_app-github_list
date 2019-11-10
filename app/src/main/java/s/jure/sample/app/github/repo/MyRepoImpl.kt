@@ -1,5 +1,6 @@
 package s.jure.sample.app.github.repo
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -8,6 +9,7 @@ import s.jure.sample.app.github.data.api.GithubApiService
 import s.jure.sample.app.github.data.daos.GithubDao
 import s.jure.sample.app.github.data.entities.GithubRepo
 import s.jure.sample.app.github.data.entities.GithubRepoContributor
+import kotlin.concurrent.thread
 
 class MyRepoImpl(private val githubDao: GithubDao,
                  private val githubApiService: GithubApiService,
@@ -43,23 +45,34 @@ class MyRepoImpl(private val githubDao: GithubDao,
     }
 
     private fun updateRepoInfo(repoId: Int, networkErrors: MutableLiveData<String>) {
-        GithubApiOperation.fetchRepoDetails(
-            githubApiService,
-            githubDao.getFullName(repoId),
-            { it ?. let { githubDao.insertRepoList(listOf(it)) } },
-            {
-                githubDao.insertUserList(it)
-                val currentList = githubDao.getContributingUserList(repoId)
-                if (currentList != it) {
-                    // delete old list
-                    githubDao.deleteContributors(repoId)
-                    // insert new list
-                    githubDao.insertContributorList(
-                        it.map { gu -> GithubRepoContributor(repoId = repoId, userId = gu.userId) }
-                    )
-                }
-            }, { error -> networkErrors.postValue(error) }
-        )
+        // run on thread as it need to get full name from database first
+        thread {
+            GithubApiOperation.fetchRepoDetails(
+                githubApiService,
+                githubDao.getFullName(repoId),
+                { thread { it?.let { githubDao.insertRepoList(listOf(it)) } } },
+                {
+                    thread {
+                        Log.d("UserData", it.toString())
+                        githubDao.insertUserList(it)
+                        val currentList = githubDao.getContributingUserList(repoId)
+                        if (currentList != it) {
+                            // delete old list
+                            githubDao.deleteContributors(repoId)
+                            // insert new list
+                            githubDao.insertContributorList(
+                                it.map { gu ->
+                                    GithubRepoContributor(
+                                        repoId = repoId,
+                                        userId = gu.userId
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }, { error -> networkErrors.postValue(error) }
+            )
+        }
     }
 
     companion object {

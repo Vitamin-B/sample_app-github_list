@@ -7,5 +7,6 @@
     <color name="secondaryTextColor">#7A7A7A</color>
     <color name="transparent">#00000000</color>
     <color name="semiTransparent">#7F7F7F</color>
-    <color name="white">#E6E6E6</color>
+    <color name= "white">#E6E6E6</color>
+    <color name= "background">#FAFAFA</color>
 </resources>

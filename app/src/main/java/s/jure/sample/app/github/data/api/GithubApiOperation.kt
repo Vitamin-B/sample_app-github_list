@@ -68,7 +68,10 @@ object GithubApiOperation {
     ) {
         Log.d(TAG, "repoFullName: $repoFullName")
 
-        service.getRepo(repoFullName).enqueue(
+        val user = repoFullName.split("/")[0]
+        val name = repoFullName.split("/")[1]
+
+        service.getRepo(user, name).enqueue(
             object : Callback<GithubRepo> {
                 override fun onFailure(call: Call<GithubRepo>?, t: Throwable) {
                     Log.d(TAG, "fail to get data")
@@ -89,7 +92,7 @@ object GithubApiOperation {
                 }
             }
         )
-        service.getRepoContributors(repoFullName).enqueue(
+        service.getRepoContributors(user, name).enqueue(
             object : Callback<List<GithubUser>> {
                 override fun onFailure(call: Call<List<GithubUser>>?, t: Throwable) {
                     Log.d(TAG, "fail to get data")

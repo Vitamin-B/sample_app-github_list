@@ -26,5 +26,5 @@ data class GithubUser (
 
     @ColumnInfo(name = "avatar_filename")
     @SerializedName("avatar_filename")
-    val avatarFilename: String
+    val avatarFilename: String?
 )

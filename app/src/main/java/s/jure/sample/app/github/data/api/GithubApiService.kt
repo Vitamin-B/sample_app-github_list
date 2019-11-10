@@ -19,14 +19,16 @@ interface GithubApiService {
         @Query("per_page") itemsPerPage: Int
     ): Call<List<GithubRepo>>
 
-    @GET("repos/{full_name}")
+    @GET("repos/{user}/{name}")
     fun getRepo(
-        @Path("full_name") fullName: String
+        @Path("user") user: String,
+        @Path("name") name: String
     ): Call<GithubRepo>
 
-    @GET("repos/{full_name}/contributors")
+    @GET("repos/{user}/{name}/contributors")
     fun getRepoContributors(
-        @Path("full_name") fullName: String
+        @Path("user") user: String,
+        @Path("name") name: String
     ): Call<List<GithubUser>>
 
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.main_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.direct
@@ -16,6 +17,8 @@ import org.kodein.di.generic.instance
 import s.jure.sample.app.github.R
 import s.jure.sample.app.github.ui.adapters.GithubRepoAdapter
 import s.jure.sample.app.github.ui.adapters.HITS_PER_PAGE
+import s.jure.sample.app.github.ui.fragments.DetailFragment
+import s.jure.sample.app.github.ui.fragments.MainFragment
 
 class MainActivity : AppCompatActivity(), KodeinAware, GithubRepoAdapter.OnEntryClickListener {
 
@@ -23,53 +26,48 @@ class MainActivity : AppCompatActivity(), KodeinAware, GithubRepoAdapter.OnEntry
 
     private lateinit var mainViewModel: MainViewModel
 
-    private lateinit var githubRepoAdapter: GithubRepoAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.main_activity)
 
-        //  injecting ViewModel instance (singleton)
+        //  injecting ViewModel
         mainViewModel = ViewModelProviders
             .of(this, direct.instance<MainViewModelFactory>())
             .get(MainViewModel::class.java)
 
 
+        if (savedInstanceState == null && fragment_container != null) {
+            // populate main fragment
+            val mainFragment = MainFragment()
 
-        // init recycler view
-        recycler_view.layoutManager =
-            LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-
-        githubRepoAdapter = GithubRepoAdapter(this)
-        recycler_view.adapter = githubRepoAdapter
-
-        mainViewModel.repoList.observe(this, Observer {
-            githubRepoAdapter.submitList(it)
-            githubRepoAdapter.refreshOnUpdate()
-        })
-
-        next_btn.setOnClickListener { updatePageNav(githubRepoAdapter.nextPage()) }
-        back_btn.setOnClickListener { updatePageNav(githubRepoAdapter.prevPage()) }
-        updatePageNav(1)
+            // Add the fragment to the 'fragmentsContainer' FrameLayout
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, mainFragment).commit()
+        }
 
     }
 
     override fun onEntryClicked(repoId: Int) {
-        //todo: implement
-        Toast.makeText(this, "RepoId: $repoId", Toast.LENGTH_SHORT).show()
+
+        // set selected repo in view model
+        mainViewModel.selectRepo(repoId)
+
+        // handle fragment if needed
+        if (fragment_container != null) {
+
+            val detailFragment = DetailFragment()
+
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, detailFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
     }
 
     override fun requestExtraEntries() {
+        // fetch extra data for repo list
         mainViewModel.fetchAdditionalRepos()
     }
-
-    private fun updatePageNav(currentPage: Int) {
-        val newStr = "${(currentPage - 1) * HITS_PER_PAGE + 1} - ${currentPage * HITS_PER_PAGE}"
-        page_info.text = newStr
-        back_btn.visibility = View.VISIBLE
-        recycler_view.scrollToPosition(0)
-    }
-
-
 }
