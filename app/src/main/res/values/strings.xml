@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Github Repo List</string>
+    <string name="back">Back</string>
+    <string name="info">Info</string>
+    <string name="contributors">Contributors</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="username">Username</string>
+</resources>
