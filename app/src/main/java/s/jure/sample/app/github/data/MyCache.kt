@@ -2,7 +2,6 @@ package s.jure.sample.app.github.data
 
 import android.util.Log
 import androidx.annotation.WorkerThread
-import androidx.paging.DataSource
 import s.jure.sample.app.github.data.daos.GithubDao
 import s.jure.sample.app.github.data.entities.GithubRepo
 import java.util.concurrent.Executor
@@ -18,8 +17,6 @@ class MyCache(
             insertFinished()
         }
     }
-
-    fun getAllRepos(): DataSource.Factory<Int, GithubRepo> = githubDao.getAllRepos()
 
     @WorkerThread
     fun getMaxRepoId() = githubDao.getMaxRepoId()

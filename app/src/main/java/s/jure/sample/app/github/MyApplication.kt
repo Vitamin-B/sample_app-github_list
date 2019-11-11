@@ -1,7 +1,6 @@
 package s.jure.sample.app.github
 
 import android.app.Application
-import androidx.paging.PagedList
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -11,13 +10,13 @@ import org.kodein.di.generic.singleton
 import s.jure.sample.app.github.data.MyCache
 import s.jure.sample.app.github.data.MyDatabase
 import s.jure.sample.app.github.data.api.GithubApiService
-import s.jure.sample.app.github.data.entities.GithubRepo
 import s.jure.sample.app.github.repo.MyRepo
 import s.jure.sample.app.github.repo.MyRepoImpl
 import s.jure.sample.app.github.repo.RepoBoundaryCallback
 import s.jure.sample.app.github.ui.MainViewModelFactory
 import java.util.concurrent.Executors
 
+@Suppress("unused")
 class MyApplication : Application(), KodeinAware {
 
     /**
@@ -41,7 +40,7 @@ class MyApplication : Application(), KodeinAware {
         bind() from singleton { MyCache(instance(), Executors.newSingleThreadExecutor()) }
 
         // bind data boundary callback (it fetches data at the end the list)
-        bind<PagedList.BoundaryCallback<GithubRepo>>() with singleton { RepoBoundaryCallback(instance(), instance()) }
+        bind<RepoBoundaryCallback>() with singleton { RepoBoundaryCallback(instance(), instance()) }
 
         // bind repository
         bind<MyRepo>() with singleton { MyRepoImpl(instance(), instance(), instance()) }

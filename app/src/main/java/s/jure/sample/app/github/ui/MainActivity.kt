@@ -1,22 +1,15 @@
 package s.jure.sample.app.github.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.android.synthetic.main.main_fragment.*
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.closestKodein
 import org.kodein.di.direct
 import org.kodein.di.generic.instance
 import s.jure.sample.app.github.R
 import s.jure.sample.app.github.ui.adapters.GithubRepoAdapter
-import s.jure.sample.app.github.ui.adapters.HITS_PER_PAGE
 import s.jure.sample.app.github.ui.fragments.DetailFragment
 import s.jure.sample.app.github.ui.fragments.MainFragment
 
@@ -45,7 +38,6 @@ class MainActivity : AppCompatActivity(), KodeinAware, GithubRepoAdapter.OnEntry
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, mainFragment).commit()
         }
-
     }
 
     override fun onEntryClicked(repoId: Int) {

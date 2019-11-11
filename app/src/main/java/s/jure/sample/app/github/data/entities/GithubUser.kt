@@ -13,7 +13,7 @@ import com.google.gson.annotations.SerializedName
 data class GithubUser (
     @PrimaryKey
     @ColumnInfo(name = "user_id")
-    @SerializedName("user_id")
+    @SerializedName("id")
     val userId: Int,
 
     @ColumnInfo(name = "login")
@@ -22,9 +22,5 @@ data class GithubUser (
 
     @ColumnInfo(name = "avatar_url")
     @SerializedName("avatar_url")
-    val avatarUrl: String,
-
-    @ColumnInfo(name = "avatar_filename")
-    @SerializedName("avatar_filename")
-    val avatarFilename: String?
+    val avatarUrl: String
 )

@@ -40,11 +40,12 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="18sp"
-            android:text="26 - 50"
+            android:text="1 - 25"
             app:layout_constraintEnd_toStartOf="@id/next_btn"
             app:layout_constraintStart_toEndOf="@id/back_btn"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="HardcodedText" />
 
         <ImageButton
             android:id="@+id/next_btn"

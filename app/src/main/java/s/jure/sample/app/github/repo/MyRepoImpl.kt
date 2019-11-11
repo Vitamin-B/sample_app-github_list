@@ -3,22 +3,20 @@ package s.jure.sample.app.github.repo
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
 import s.jure.sample.app.github.data.api.GithubApiOperation
 import s.jure.sample.app.github.data.api.GithubApiService
 import s.jure.sample.app.github.data.daos.GithubDao
-import s.jure.sample.app.github.data.entities.GithubRepo
 import s.jure.sample.app.github.data.entities.GithubRepoContributor
 import kotlin.concurrent.thread
 
 class MyRepoImpl(private val githubDao: GithubDao,
                  private val githubApiService: GithubApiService,
-                 private val boundaryCallback: PagedList.BoundaryCallback<GithubRepo>
+                 private val boundaryCallback: RepoBoundaryCallback
                  ): MyRepo {
 
     override fun queryRepoList(): RepoListResult {
 
-        val networkErrors = MutableLiveData<String>()
+        val networkErrors = boundaryCallback.networkErrors
 
         val repoList = LivePagedListBuilder(githubDao.getAllRepos(), DATABASE_PAGE_SIZE)
             .setBoundaryCallback(boundaryCallback)

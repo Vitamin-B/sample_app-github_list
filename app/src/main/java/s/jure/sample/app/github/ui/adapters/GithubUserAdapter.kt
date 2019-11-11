@@ -7,11 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import s.jure.sample.app.github.R
 import s.jure.sample.app.github.data.entities.GithubUser
 
 
-class GithubUserAdapter() : RecyclerView.Adapter<GithubUserAdapter.EntryViewHolder>() {
+class GithubUserAdapter : RecyclerView.Adapter<GithubUserAdapter.EntryViewHolder>() {
 
     private var userList: MutableList<GithubUser> = ArrayList()
 
@@ -47,7 +48,9 @@ class GithubUserAdapter() : RecyclerView.Adapter<GithubUserAdapter.EntryViewHold
                 profilePic.visibility = View.INVISIBLE
             else {
                 profilePic.visibility = View.VISIBLE
-                //todo: get the photo
+
+                val picasso = Picasso.get()
+                picasso.load(gu.avatarUrl).into(profilePic)
             }
         }
     }
@@ -70,7 +73,7 @@ class GithubUserAdapter() : RecyclerView.Adapter<GithubUserAdapter.EntryViewHold
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldPosts[oldItemPosition].loginName == newPosts[newItemPosition].loginName &&
-                    oldPosts[oldItemPosition].avatarFilename == newPosts[newItemPosition].avatarFilename
+                    oldPosts[oldItemPosition].avatarUrl == newPosts[newItemPosition].avatarUrl
         }
     }
 }
