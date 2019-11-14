@@ -7,12 +7,12 @@ import retrofit2.Response
 import s.jure.sample.app.github.data.entities.GithubRepo
 import s.jure.sample.app.github.data.entities.GithubUser
 
-private const val TAG = "GithubService"
+private const val TAG = "GithubApiOperation"
 
 object GithubApiOperation {
 
     /**
-     * Fetch list of repos
+     * Fetch repo list
      * @param fromIdExcluding search from repo id onwards (excluding specified id)
      * @param itemsPerPage number of repositories to be returned (max 100)
      *
@@ -30,7 +30,7 @@ object GithubApiOperation {
         service.getRepoList(fromIdExcluding ?: 0, itemsPerPage).enqueue(
             object : Callback<List<GithubRepo>> {
                 override fun onFailure(call: Call<List<GithubRepo>>?, t: Throwable) {
-                    Log.d(TAG, "fail to get data")
+                    Log.d(TAG, "failed to get data")
                     onError(t.message ?: "? Repo list fetch error")
                 }
 
@@ -38,8 +38,7 @@ object GithubApiOperation {
                     call: Call<List<GithubRepo>>?,
                     response: Response<List<GithubRepo>>
                 ) {
-
-                    Log.d(TAG, "got a response $response")
+                    Log.d(TAG, "response: $response")
 
                     if (response.isSuccessful)
                         onSuccess(response.body().orEmpty())
@@ -53,7 +52,7 @@ object GithubApiOperation {
     /**
      * Fetch info of specific repo
      * @param repoFullName repo full name (user/repo_name)
-     * in two parts:
+     * Two parts:
      * 1. Info about repo (statistics)
      * 2. List of contributors
      *

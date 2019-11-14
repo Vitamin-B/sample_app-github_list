@@ -1,28 +1,20 @@
 package s.jure.sample.app.github.ui
 
-import androidx.lifecycle.*
-import androidx.paging.PagedList
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
 import s.jure.sample.app.github.data.entities.GithubRepo
 import s.jure.sample.app.github.data.entities.GithubUser
 import s.jure.sample.app.github.repo.MyRepo
-import s.jure.sample.app.github.repo.RepoDetailsResult
 
 class MainViewModel(
     private val myRepo: MyRepo
 ) : ViewModel() {
 
-    /**
-     * Repo list
-     */
+    val networkErrors = myRepo.networkErrors
 
-    val repoList: LiveData<PagedList<GithubRepo>>
-    val repoListNetworkErrors: LiveData<String>
-
-    init {
-        val repoListResult = myRepo.queryRepoList()
-        repoList = repoListResult.repoList
-        repoListNetworkErrors = repoListResult.networkErrors
-    }
+    val repoList = myRepo.queryRepoList()
 
     fun fetchAdditionalRepos() = myRepo.fetchAdditionalRepos()
 
@@ -32,17 +24,14 @@ class MainViewModel(
      */
 
     private val selectedRepo = MutableLiveData<Int>()
-    private val repoDetailsResult: LiveData<RepoDetailsResult> =
+    private val repoDetailsResult: LiveData<MyRepo.RepoDetailsResult> =
         Transformations.map(selectedRepo) { myRepo.queryRepoDetails(it) }
 
     val selectedRepoDetails: LiveData<GithubRepo> =
         Transformations.switchMap(repoDetailsResult) { it.repo }
     val selectedRepoContributors: LiveData<List<GithubUser>> =
         Transformations.switchMap(repoDetailsResult) { it.contributorList }
-    val selectedRepoNetworkErrors: LiveData<String> =
-        Transformations.switchMap(repoDetailsResult) { it.networkErrors }
 
-    fun selectRepo(repoId: Int) {
-        selectedRepo.postValue(repoId)
-    }
+    fun selectRepo(repoId: Int) = selectedRepo.postValue(repoId)
+
 }

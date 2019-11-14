@@ -1,76 +1,48 @@
 package s.jure.sample.app.github.repo
 
-import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
-import s.jure.sample.app.github.data.api.GithubApiOperation
-import s.jure.sample.app.github.data.api.GithubApiService
-import s.jure.sample.app.github.data.daos.GithubDao
-import s.jure.sample.app.github.data.entities.GithubRepoContributor
-import kotlin.concurrent.thread
+import androidx.paging.PagedList
+import s.jure.sample.app.github.data.MyCache
+import s.jure.sample.app.github.data.entities.GithubRepo
 
-class MyRepoImpl(private val githubDao: GithubDao,
-                 private val githubApiService: GithubApiService,
-                 private val boundaryCallback: RepoBoundaryCallback
-                 ): MyRepo {
+class MyRepoImpl(private val myCache: MyCache): MyRepo {
 
-    override fun queryRepoList(): RepoListResult {
+    private val _networkErrors = MutableLiveData<String>()
 
-        val networkErrors = boundaryCallback.networkErrors
+    override val networkErrors: LiveData<String>
+        get() = _networkErrors
 
-        val repoList = LivePagedListBuilder(githubDao.getAllRepos(), DATABASE_PAGE_SIZE)
-            .setBoundaryCallback(boundaryCallback)
+    override fun queryRepoList() =
+        LivePagedListBuilder(myCache.getAllRepos(), DATABASE_PAGE_SIZE)
+            .setBoundaryCallback(RepoBoundaryCallback())
             .build()
 
-        return RepoListResult(repoList = repoList, networkErrors = networkErrors)
-    }
+    override fun fetchAdditionalRepos() = myCache.fetchMoreRepos()
 
-    override fun fetchAdditionalRepos() {
-        boundaryCallback.onZeroItemsLoaded()
-    }
+    override fun queryRepoDetails(repoId: Int): MyRepo.RepoDetailsResult {
 
-    override fun queryRepoDetails(repoId: Int): RepoDetailsResult {
+        updateRepoInfo(repoId, _networkErrors)
 
-        val networkErrors = MutableLiveData<String>()
-
-        updateRepoInfo(repoId, networkErrors)
-
-        return RepoDetailsResult(
-            repo = githubDao.getRepoById(repoId),
-            contributorList = githubDao.getContributingUserListLD(repoId),
-            networkErrors = networkErrors
+        return MyRepo.RepoDetailsResult(
+            repo = myCache.getRepoLD(repoId),
+            contributorList = myCache.getContributingUserListLD(repoId)
         )
     }
 
-    private fun updateRepoInfo(repoId: Int, networkErrors: MutableLiveData<String>) {
-        // run on thread as it need to get full name from database first
-        thread {
-            GithubApiOperation.fetchRepoDetails(
-                githubApiService,
-                githubDao.getFullName(repoId),
-                { thread { it?.let { githubDao.insertRepoList(listOf(it)) } } },
-                {
-                    thread {
-                        Log.d("UserData", it.toString())
-                        githubDao.insertUserList(it)
-                        val currentList = githubDao.getContributingUserList(repoId)
-                        if (currentList != it) {
-                            // delete old list
-                            githubDao.deleteContributors(repoId)
-                            // insert new list
-                            githubDao.insertContributorList(
-                                it.map { gu ->
-                                    GithubRepoContributor(
-                                        repoId = repoId,
-                                        userId = gu.userId
-                                    )
-                                }
-                            )
-                        }
-                    }
-                }, { error -> networkErrors.postValue(error) }
-            )
-        }
+    private fun updateRepoInfo(repoId: Int, networkErrors: MutableLiveData<String>) =
+        myCache.fetchRepoDetails(repoId, networkErrors)
+
+
+
+    inner class RepoBoundaryCallback : PagedList.BoundaryCallback<GithubRepo>() {
+
+        override fun onZeroItemsLoaded() =
+            myCache.fetchMoreRepos(_networkErrors)
+
+        override fun onItemAtEndLoaded(itemAtEnd: GithubRepo) =
+            myCache.fetchMoreRepos(_networkErrors)
     }
 
     companion object {

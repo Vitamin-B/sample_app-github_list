@@ -1,7 +1,9 @@
 package s.jure.sample.app.github.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.main_activity.*
 import org.kodein.di.KodeinAware
@@ -38,6 +40,11 @@ class MainActivity : AppCompatActivity(), KodeinAware, GithubRepoAdapter.OnEntry
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, mainFragment).commit()
         }
+
+        // display network error messages
+        mainViewModel.networkErrors.observe(this, Observer {
+            Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+        })
     }
 
     override fun onEntryClicked(repoId: Int) {

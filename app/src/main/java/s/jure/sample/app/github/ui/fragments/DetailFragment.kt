@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -36,10 +35,10 @@ internal class DetailFragment : Fragment() {
         mainViewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
 
         mainViewModel.selectedRepoDetails.observe(this, Observer { gr ->
-            n_stars_tw.text = gr.stargazers ?. toString() ?: " "
-            n_forks_tw.text = gr.forkCount ?. toString() ?: " "
+            n_stars_tw.text = gr.stargazers?.toString() ?: " "
+            n_forks_tw.text = gr.forkCount?.toString() ?: " "
             repo_size_tw.text = gr.size
-                ?. let { if (it < 10000) "$it kB" else "${it/1000} MB" } ?: " "
+                ?.let { if (it < 10000) "$it kB" else "${it / 1000} MB" } ?: " "
             dt_repo_name.text = gr.name
             dt_repo_name_long.text = gr.fullName
         })
@@ -50,12 +49,17 @@ internal class DetailFragment : Fragment() {
         contributorsAdapter = GithubUserAdapter()
         contributors_list.adapter = contributorsAdapter
 
-        mainViewModel.selectedRepoContributors.observe(this, Observer { gul ->
-            contributorsAdapter.setData(gul)
-        })
+        mainViewModel.selectedRepoContributors.observe(this, Observer { contributors ->
+            contributorsAdapter.setData(contributors)
 
-        mainViewModel.selectedRepoNetworkErrors.observe(this, Observer {
-            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
+            // special text for no contributors
+            dt_contributors_label.setText(
+                if (contributors.isNullOrEmpty())
+                    R.string.no_contributors
+                else
+                    R.string.contributors
+            )
+
         })
 
     }

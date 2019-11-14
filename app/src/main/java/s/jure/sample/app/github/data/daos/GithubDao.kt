@@ -34,7 +34,7 @@ interface GithubDao {
     fun getAllRepos(): DataSource.Factory<Int, GithubRepo>
 
     @Query("SELECT * from repos WHERE repo_id = :repoId")
-    fun getRepoById(repoId: Int): LiveData<GithubRepo>
+    fun getRepoLD(repoId: Int): LiveData<GithubRepo>
 
     @Query("SELECT full_name from repos WHERE repo_id = :repoId")
     fun getFullName(repoId: Int): String
@@ -50,4 +50,7 @@ interface GithubDao {
             (SELECT user_id FROM repo_contributors WHERE repo_id = :repoId)"""
     )
     fun getContributingUserList(repoId: Int): List<GithubUser>
+
+    @Update
+    fun updateRepo(repo: GithubRepo)
 }

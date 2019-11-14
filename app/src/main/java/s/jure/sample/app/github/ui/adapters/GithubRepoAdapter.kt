@@ -33,6 +33,12 @@ class GithubRepoAdapter(
     }
 
     override fun onBindViewHolder(holder: EntryViewHolder, position: Int) {
+        // holder.bind(getItem(position))
+
+        /**
+         * Modifications for page-wise display
+         */
+
         if (position < HITS_PER_PAGE) {
             val actualPosition = position + (resultPageNumber - 1) * HITS_PER_PAGE
 
@@ -46,6 +52,11 @@ class GithubRepoAdapter(
             }
         }
     }
+
+
+    /**
+     * Extensions for page-wise display
+     */
 
     fun prevPage(): Int {
         if (resultPageNumber > 1) {
@@ -79,6 +90,10 @@ class GithubRepoAdapter(
         val count = super.getItemCount()
         return min(count, HITS_PER_PAGE)
     }
+
+    /**
+     * End of extensions for page-wise display
+     */
 
     inner class EntryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

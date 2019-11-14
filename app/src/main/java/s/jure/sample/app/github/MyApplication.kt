@@ -12,7 +12,6 @@ import s.jure.sample.app.github.data.MyDatabase
 import s.jure.sample.app.github.data.api.GithubApiService
 import s.jure.sample.app.github.repo.MyRepo
 import s.jure.sample.app.github.repo.MyRepoImpl
-import s.jure.sample.app.github.repo.RepoBoundaryCallback
 import s.jure.sample.app.github.ui.MainViewModelFactory
 import java.util.concurrent.Executors
 
@@ -37,13 +36,10 @@ class MyApplication : Application(), KodeinAware {
         bind() from singleton { instance<MyDatabase>().githubDao() }
 
         // bind cache
-        bind() from singleton { MyCache(instance(), Executors.newSingleThreadExecutor()) }
-
-        // bind data boundary callback (it fetches data at the end the list)
-        bind<RepoBoundaryCallback>() with singleton { RepoBoundaryCallback(instance(), instance()) }
+        bind() from singleton { MyCache(instance(), instance(), Executors.newSingleThreadExecutor()) }
 
         // bind repository
-        bind<MyRepo>() with singleton { MyRepoImpl(instance(), instance(), instance()) }
+        bind<MyRepo>() with singleton { MyRepoImpl(instance()) }
 
         // bind View Model
         bind<MainViewModelFactory>() with singleton { MainViewModelFactory(instance()) }
