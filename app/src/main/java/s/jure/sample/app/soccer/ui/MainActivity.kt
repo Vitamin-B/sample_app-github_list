@@ -22,8 +22,6 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
 
     private lateinit var mainViewModel: MainViewModel
 
-    private val detailFragment by lazy { DetailFragment() }
-
     // landscape tablet has split view, which affects the app bar
     private val splitView: Boolean
         get() = fragment_container == null
@@ -79,7 +77,7 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
         if (!splitView) {
             // handle fragment if needed
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, detailFragment)
+                .add(R.id.fragment_container, DetailFragment())
                 .addToBackStack(null)
                 .commit()
         } else
