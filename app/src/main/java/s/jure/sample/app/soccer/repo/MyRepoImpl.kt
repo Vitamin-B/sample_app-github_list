@@ -16,8 +16,6 @@ class MyRepoImpl(private val myCache: MyCache,
 
     override fun queryClubList(): ClubListResult {
 
-        updateClubList()
-
         return ClubListResult(
             clubs = myCache.getClubList(),
             networkErrors = networkErrors
@@ -32,7 +30,7 @@ class MyRepoImpl(private val myCache: MyCache,
             SoccerApiOperation.fetchClubList(
                 soccerApiService,
                 { thread { myCache.insertRepoList(it) {fetchInProgress = false} } },
-                { error -> networkErrors.postValue(error) })
+                { error -> networkErrors.postValue(error); fetchInProgress = false })
         }
     }
 }

@@ -46,13 +46,23 @@ class MainFragment : Fragment() {
             swipe_to_refresh.isRefreshing = false
         })
 
-        // show network errors to user
-        mainViewModel.clubListNetworkErrors.observe(this, Observer {
-            Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
-            swipe_to_refresh.isRefreshing = false
-        })
-
         // enable swipe to refresh
         swipe_to_refresh.setOnRefreshListener { mainViewModel.updateList() }
+
+        /**
+         * Show network errors to user
+         */
+
+        // do not react to old messages (e.g. on device rotation)
+        var ignoreNextMessage = mainViewModel.clubListNetworkErrors.value != null
+
+        mainViewModel.clubListNetworkErrors.observe(this, Observer {
+            if (ignoreNextMessage)
+                ignoreNextMessage = false
+            else {
+                Toast.makeText(activity, it, Toast.LENGTH_LONG).show()
+                swipe_to_refresh.isRefreshing = false
+            }
+        })
     }
 }

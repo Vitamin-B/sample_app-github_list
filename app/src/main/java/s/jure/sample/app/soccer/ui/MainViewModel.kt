@@ -23,6 +23,7 @@ class MainViewModel(
         val repoListResult = myRepo.queryClubList()
         unsortedClubList = repoListResult.clubs
         clubListNetworkErrors = repoListResult.networkErrors
+        updateList()
     }
 
     fun updateList() = myRepo.updateClubList()
