@@ -5,7 +5,6 @@
     android:viewportHeight="16.544687">
   <group android:translateX="3.3916612"
       android:translateY="3.402493">
-
     <path
         android:pathData="m9.67887,4.8699c0,2.64396 -2.14335,4.78731 -4.7873,4.78731 -2.64396,0 -4.7873,-2.14335 -4.7873,-4.78731 0,-2.64396 2.14335,-4.7873 4.7873,-4.7873 2.64396,-0 4.7873,2.14335 4.7873,4.7873z"
         android:strokeAlpha="1"
@@ -33,12 +32,5 @@
         android:strokeColor="#000000"
         android:fillAlpha="1"
         android:strokeLineCap="round"/>
-    <path
-        android:pathData="M6.87326,0.96322a0.12921,0.20689 122.1264,1 0,0.35263 0.21641a0.12921,0.20689 122.1264,1 0,-0.35263 -0.21641z"
-        android:strokeAlpha="1"
-        android:strokeWidth="0.100006"
-        android:fillColor="#ffffff"
-        android:strokeColor="#000000"
-        android:fillAlpha="1"/>
   </group>
 </vector>

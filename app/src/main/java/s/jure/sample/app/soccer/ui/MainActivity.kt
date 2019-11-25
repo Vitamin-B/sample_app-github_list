@@ -46,14 +46,15 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
             }
 
             supportFragmentManager.addOnBackStackChangedListener { updateActionBar() }
-
-            updateActionBar()
         }
+
+        updateActionBar()
     }
 
     private fun updateActionBar() {
 
-        mainFragmentActive = supportFragmentManager.fragments.lastOrNull() is MainFragment
+        mainFragmentActive = supportFragmentManager.fragments.lastOrNull()
+            ?.let { it is MainFragment } ?: true
 
         // show back arrow if not MainFragment
         supportActionBar?.setDisplayHomeAsUpEnabled(!mainFragmentActive)

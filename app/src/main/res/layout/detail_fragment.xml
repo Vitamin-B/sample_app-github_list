@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="vertical"
-    android:background="@color/text_logo_area"
+    android:background="@color/background"
     android:weightSum="1.55">
 
     <LinearLayout
@@ -36,7 +36,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="8dp"
             android:text="@string/app_name"
-            android:textColor="@color/text_logo_area"
+            android:textColor="@color/whiteTextColor"
             android:textSize="24sp"
             tools:ignore="NestedWeights" />
 
