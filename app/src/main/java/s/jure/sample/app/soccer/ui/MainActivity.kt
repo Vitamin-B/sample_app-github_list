@@ -22,7 +22,15 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
 
     private lateinit var mainViewModel: MainViewModel
 
-    private var mainFragmentActive = true
+    private val detailFragment by lazy { DetailFragment() }
+
+    // landscape tablet has split view, which affects the app bar
+    private val splitView: Boolean
+        get() = fragment_container == null
+
+    // to know is main list is displayed
+    private val hasBackStack: Boolean
+        get() = supportFragmentManager.backStackEntryCount > 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,35 +43,29 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
             .get(MainViewModel::class.java)
 
 
-        if (fragment_container != null) {
-            if (savedInstanceState == null) {
-                // populate main fragment
-                val mainFragment = MainFragment()
-
-                // Add the fragment to the 'fragmentsContainer' FrameLayout
+        if (!splitView) {
+            if (savedInstanceState == null)
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, mainFragment).commit()
-            }
+                    .add(R.id.fragment_container, MainFragment()).commit()
 
             supportFragmentManager.addOnBackStackChangedListener { updateActionBar() }
         }
 
+        // refresh action bar
         updateActionBar()
     }
 
     private fun updateActionBar() {
 
-        mainFragmentActive = supportFragmentManager.fragments.lastOrNull()
-            ?.let { it is MainFragment } ?: true
+        // title
+        supportActionBar?.title =
+            if (hasBackStack || splitView)
+                mainViewModel.selectedClub.value?.name ?: getString(R.string.app_name)
+            else
+                getString(R.string.app_name)
 
-        // show back arrow if not MainFragment
-        supportActionBar?.setDisplayHomeAsUpEnabled(!mainFragmentActive)
-
-        // change title
-        when (supportFragmentManager.fragments.lastOrNull()) {
-            is MainFragment -> supportActionBar?.title = getString(R.string.app_name)
-            is DetailFragment -> supportActionBar?.title = mainViewModel.selectedClub?.name
-        }
+        // back arrow
+        supportActionBar?.setDisplayHomeAsUpEnabled(hasBackStack && !splitView)
 
         // refresh options menu
         invalidateOptionsMenu()
@@ -72,18 +74,16 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
     override fun onEntryClicked(club: SoccerClub) {
 
         // set selected repo in view model
-        mainViewModel.selectedClub = club
+        mainViewModel.selectClub(club)
 
-        // handle fragment if needed
-        if (fragment_container != null) {
-
-            val detailFragment = DetailFragment()
-
+        if (!splitView) {
+            // handle fragment if needed
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, detailFragment)
                 .addToBackStack(null)
                 .commit()
-        }
+        } else
+            supportActionBar?.title = club.name
 
     }
 
@@ -108,8 +108,8 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        // shows sorting option only on main fragment
-        menu?.findItem(R.id.switch_sort)?.isVisible = mainFragmentActive
+        // shows sorting option
+        menu?.findItem(R.id.switch_sort)?.isVisible = !hasBackStack || splitView
         return super.onPrepareOptionsMenu(menu)
     }
 }

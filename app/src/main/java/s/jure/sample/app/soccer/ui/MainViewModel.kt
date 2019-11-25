@@ -75,5 +75,11 @@ class MainViewModel(
      *
      */
 
-    var selectedClub: SoccerClub? = null
+    private val selectedClubMLD = MutableLiveData<SoccerClub>()
+
+    val selectedClub: LiveData<SoccerClub> = selectedClubMLD
+
+    fun selectClub(club: SoccerClub) {
+        selectedClubMLD.postValue(club)
+    }
 }
