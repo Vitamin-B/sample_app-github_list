@@ -42,9 +42,9 @@ class MainActivity : AppCompatActivity(), KodeinAware, ClubListAdapter.OnEntryCl
             .of(this, direct.instance<MainViewModelFactory>())
             .get(MainViewModel::class.java)
 
-
         if (!splitView) {
-            if (savedInstanceState == null)
+            // add MainFragment if FrameLayout of single view is empty
+            if (supportFragmentManager.findFragmentById(R.id.fragment_container) == null)
                 supportFragmentManager.beginTransaction()
                     .add(R.id.fragment_container, MainFragment()).commit()
 
