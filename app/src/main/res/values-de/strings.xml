@@ -7,7 +7,7 @@
 
     <plurals name="millions">
         <item quantity="one">%d Million</item>
-        <item quantity="other">%d Millions</item>
+        <item quantity="other">%d Millionen</item>
     </plurals>
 
     <plurals name="club_value_desc">
