@@ -33,4 +33,19 @@ data class SoccerClub (
     @SerializedName("european_titles")
     val europeanTitles: Int? = null
 
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        if (other is SoccerClub)
+            return name == other.name &&
+                    country == other.country &&
+                    clubValue == other.clubValue &&
+                    imageUrl == other.imageUrl &&
+                    europeanTitles == other.europeanTitles
+
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+}

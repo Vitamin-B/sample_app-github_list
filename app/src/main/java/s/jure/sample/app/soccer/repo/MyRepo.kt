@@ -7,6 +7,6 @@ interface MyRepo {
     fun queryClubList(): ClubListResult
 
     // trigger manual update of the list (e.g. on swipe down)
-    fun updateClubList()
+    fun updateClubList(forced: Boolean = false)
 
 }

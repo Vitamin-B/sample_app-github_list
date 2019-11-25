@@ -6,9 +6,10 @@ import s.jure.sample.app.soccer.data.SoccerApiOperation
 import s.jure.sample.app.soccer.data.SoccerApiService
 import kotlin.concurrent.thread
 
-class MyRepoImpl(private val myCache: MyCache,
-                 private val soccerApiService: SoccerApiService
-                 ): MyRepo {
+class MyRepoImpl(
+    private val myCache: MyCache,
+    private val soccerApiService: SoccerApiService
+) : MyRepo {
 
     private var fetchInProgress = false
 
@@ -22,14 +23,22 @@ class MyRepoImpl(private val myCache: MyCache,
         )
     }
 
-    override fun updateClubList() {
+    override fun updateClubList(forced: Boolean) {
 
         if (!fetchInProgress) {
             fetchInProgress = true
 
             SoccerApiOperation.fetchClubList(
                 soccerApiService,
-                { thread { myCache.insertRepoList(it) {fetchInProgress = false} } },
+                {
+                    thread {
+                        myCache.insertRepoList(it) {
+                            fetchInProgress = false
+                            if (forced)
+                                networkErrors.postValue("Up to date")
+                        }
+                    }
+                },
                 { error -> networkErrors.postValue(error); fetchInProgress = false })
         }
     }
