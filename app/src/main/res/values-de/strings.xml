@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">all about soccer</string>
+
+    <string name="switch_sort_method">Sortierung wechseln</string>
+    <string name="club_logo">Wappen</string>
+
+    <plurals name="millions">
+        <item quantity="one">%d Million</item>
+        <item quantity="other">%d Millions</item>
+    </plurals>
+
+    <plurals name="club_value_desc">
+        <item quantity="one">Der Club &lt;b>%1$s&lt;/b> aus %2$s hat einen Wert von %3$d Million Euro.</item>
+        <item quantity="other">Der Club &lt;b>%1$s&lt;/b> aus %2$s hat einen Wert von %3$d Millionen Euro.</item>
+    </plurals>
+
+    <plurals name="club_euro_chips_desc">
+        <item quantity="one">&lt;b>%1$s&lt;/b> konnte bislang %2$d Sieg auf europäischer Ebene erreichen.</item>
+        <item quantity="other">&lt;b>%1$s&lt;/b> konnte bislang %2$d Siege auf europäischer Ebene erreichen.</item>
+    </plurals>
+</resources>

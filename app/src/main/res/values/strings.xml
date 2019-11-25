@@ -1,7 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Github Repo List</string>
-    <string name="back">Back</string>
-    <string name="contributors">Contributors:</string>
-    <string name="profile_picture">Profile picture</string>
-    <string name="username">Username</string>
+    <string name="app_name">all about soccer</string>
+
+    <string name="club_logo">Coat of arms</string>
+    <string name="switch_sort_method">Switch sorting</string>
+
+    <plurals name="millions">
+        <item quantity="one">%d million</item>
+        <item quantity="other">%d millions</item>
+    </plurals>
+
+    <plurals name="club_value_desc">
+        <item quantity="one">The club &lt;b>%1$s&lt;/b> from %2$s has a value of %3$d million Euros.</item>
+        <item quantity="other">The club &lt;b>%1$s&lt;/b> from %2$s has a value of %3$d millions Euros.</item>
+    </plurals>
+
+    <plurals name="club_euro_chips_desc">
+        <item quantity="zero">&lt;b>%1$s&lt;/b> did not win any European title.</item>
+        <item quantity="one">&lt;b>%1$s&lt;/b> has won %2$d European title.</item>
+        <item quantity="other">&lt;b>%1$s&lt;/b> has won %2$d European titles.</item>
+    </plurals>
 </resources>

@@ -6,36 +6,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="ListNavButton" parent="Widget.AppCompat.ImageButton">
-        <item name="android:background">@color/transparent</item>
-        <item name="android:scaleX">1.5</item>
-        <item name="android:scaleY">1.5</item>
-        <item name="android:tint">@color/semiTransparent</item>
-    </style>
-
-    <style name="InfoTextStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:padding">8dp</item>
-    </style>
-
-    <style name="TextWithIconStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/secondaryTextColor</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:drawablePadding">8dp</item>
-        <item name="android:paddingStart">16dp</item>
-    </style>
-
-    <style name="RepoCardView" parent="Widget.MaterialComponents.CardView">
-        <item name="cardBackgroundColor">#FFF</item>
-        <item name="cardCornerRadius">4dp</item>
-        <item name="cardElevation">2dp</item>
-        <item name="cardUseCompatPadding">true</item>
-        <item name="android:padding">8dp</item>
-    </style>
-
-    <style name="UserCardView" parent="Widget.MaterialComponents.CardView">
+    <style name="ClubCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">#FFF</item>
         <item name="cardCornerRadius">4dp</item>
         <item name="cardElevation">2dp</item>

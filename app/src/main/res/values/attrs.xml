@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="sort_method">
+        <attr name="state_sort_by_name" format="boolean" />
+        <attr name="state_sort_by_value" format="boolean" />
+    </declare-styleable>
+
+</resources>

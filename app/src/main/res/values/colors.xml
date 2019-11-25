@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimary">#01C13B</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="primaryTextColor">#DE000000</color>
     <color name="secondaryTextColor">#7A7A7A</color>
     <color name="transparent">#00000000</color>
     <color name="semiTransparent">#7F7F7F</color>
-    <color name= "background">#FAFAFA</color>
+    <color name="text_logo_area">#FAFAFA</color>
+    <color name="logoBackground">#333333</color>
 </resources>
